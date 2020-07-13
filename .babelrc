@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "modules": false,
+        "loose": true,
+      }
+    ]
+  ],
+  "plugins": ["@babel/plugin-transform-spread"],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/env"
+        ]
+      ]
+    }
+  }
+}

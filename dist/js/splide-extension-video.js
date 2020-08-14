@@ -1,15 +1,5 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 /******/
@@ -298,7 +288,7 @@ function (module, __webpack_exports__, __webpack_require__) {
   /* WEBPACK VAR INJECTION */
 
   (function (global, setImmediate) {
-    /*! @vimeo/player v2.10.0 | (c) 2019 Vimeo | MIT License | https://github.com/vimeo/player.js */
+    /*! @vimeo/player v2.12.2 | (c) 2020 Vimeo | MIT License | https://github.com/vimeo/player.js */
     function _classCallCheck(instance, Constructor) {
       if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -425,7 +415,7 @@ function (module, __webpack_exports__, __webpack_require__) {
       throw new Error('Sorry, the Vimeo Player API is not available in this browser.');
     }
 
-    var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
     function createCommonjsModule(fn, module) {
       return module = {
@@ -433,9 +423,9 @@ function (module, __webpack_exports__, __webpack_require__) {
       }, fn(module, module.exports), module.exports;
     }
     /*!
-     * weakmap-polyfill v2.0.0 - ECMAScript6 WeakMap polyfill
+     * weakmap-polyfill v2.0.1 - ECMAScript6 WeakMap polyfill
      * https://github.com/polygonplanet/weakmap-polyfill
-     * Copyright (c) 2015-2016 polygon planet <polygon.planet.aqua@gmail.com>
+     * Copyright (c) 2015-2020 Polygon Planet <polygon.planet.aqua@gmail.com>
      * @license MIT
      */
 
@@ -1216,11 +1206,7 @@ function (module, __webpack_exports__, __webpack_require__) {
         }
       };
 
-      if (window.addEventListener) {
-        window.addEventListener('message', onMessage, false);
-      } else if (window.attachEvent) {
-        window.attachEvent('onmessage', onMessage);
-      }
+      window.addEventListener('message', onMessage);
     }
     /**
      * @module lib/postmessage
@@ -1327,9 +1313,125 @@ function (module, __webpack_exports__, __webpack_require__) {
         }
       });
     }
+    /* MIT License
+    
+    Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    Terms */
+
+
+    function initializeScreenfull() {
+      var fn = function () {
+        var val;
+        var fnMap = [['requestFullscreen', 'exitFullscreen', 'fullscreenElement', 'fullscreenEnabled', 'fullscreenchange', 'fullscreenerror'], // New WebKit
+        ['webkitRequestFullscreen', 'webkitExitFullscreen', 'webkitFullscreenElement', 'webkitFullscreenEnabled', 'webkitfullscreenchange', 'webkitfullscreenerror'], // Old WebKit
+        ['webkitRequestFullScreen', 'webkitCancelFullScreen', 'webkitCurrentFullScreenElement', 'webkitCancelFullScreen', 'webkitfullscreenchange', 'webkitfullscreenerror'], ['mozRequestFullScreen', 'mozCancelFullScreen', 'mozFullScreenElement', 'mozFullScreenEnabled', 'mozfullscreenchange', 'mozfullscreenerror'], ['msRequestFullscreen', 'msExitFullscreen', 'msFullscreenElement', 'msFullscreenEnabled', 'MSFullscreenChange', 'MSFullscreenError']];
+        var i = 0;
+        var l = fnMap.length;
+        var ret = {};
+
+        for (; i < l; i++) {
+          val = fnMap[i];
+
+          if (val && val[1] in document) {
+            for (i = 0; i < val.length; i++) {
+              ret[fnMap[0][i]] = val[i];
+            }
+
+            return ret;
+          }
+        }
+
+        return false;
+      }();
+
+      var eventNameMap = {
+        fullscreenchange: fn.fullscreenchange,
+        fullscreenerror: fn.fullscreenerror
+      };
+      var screenfull = {
+        request: function request(element) {
+          return new Promise(function (resolve, reject) {
+            var onFullScreenEntered = function onFullScreenEntered() {
+              screenfull.off('fullscreenchange', onFullScreenEntered);
+              resolve();
+            };
+
+            screenfull.on('fullscreenchange', onFullScreenEntered);
+            element = element || document.documentElement;
+            var returnPromise = element[fn.requestFullscreen]();
+
+            if (returnPromise instanceof Promise) {
+              returnPromise.then(onFullScreenEntered)["catch"](reject);
+            }
+          });
+        },
+        exit: function exit() {
+          return new Promise(function (resolve, reject) {
+            if (!screenfull.isFullscreen) {
+              resolve();
+              return;
+            }
+
+            var onFullScreenExit = function onFullScreenExit() {
+              screenfull.off('fullscreenchange', onFullScreenExit);
+              resolve();
+            };
+
+            screenfull.on('fullscreenchange', onFullScreenExit);
+            var returnPromise = document[fn.exitFullscreen]();
+
+            if (returnPromise instanceof Promise) {
+              returnPromise.then(onFullScreenExit)["catch"](reject);
+            }
+          });
+        },
+        on: function on(event, callback) {
+          var eventName = eventNameMap[event];
+
+          if (eventName) {
+            document.addEventListener(eventName, callback);
+          }
+        },
+        off: function off(event, callback) {
+          var eventName = eventNameMap[event];
+
+          if (eventName) {
+            document.removeEventListener(eventName, callback);
+          }
+        }
+      };
+      Object.defineProperties(screenfull, {
+        isFullscreen: {
+          get: function get() {
+            return Boolean(document[fn.fullscreenElement]);
+          }
+        },
+        element: {
+          enumerable: true,
+          get: function get() {
+            return document[fn.fullscreenElement];
+          }
+        },
+        isEnabled: {
+          enumerable: true,
+          get: function get() {
+            // Coerce to boolean in case of old WebKit
+            return Boolean(document[fn.fullscreenEnabled]);
+          }
+        }
+      });
+      return screenfull;
+    }
 
     var playerMap = new WeakMap();
     var readyMap = new WeakMap();
+    var screenfull = {};
 
     var Player = /*#__PURE__*/function () {
       /**
@@ -1365,9 +1467,8 @@ function (module, __webpack_exports__, __webpack_require__) {
 
         if (!isDomElement(element)) {
           throw new TypeError('You must pass either a valid element or a valid id.');
-        }
+        } // Already initialized an embed in this div, so grab the iframe
 
-        var win = element.ownerDocument.defaultView; // Already initialized an embed in this div, so grab the iframe
 
         if (element.nodeName !== 'IFRAME') {
           var iframe = element.querySelector('iframe');
@@ -1387,10 +1488,11 @@ function (module, __webpack_exports__, __webpack_require__) {
           return playerMap.get(element);
         }
 
+        this._window = element.ownerDocument.defaultView;
         this.element = element;
         this.origin = '*';
         var readyPromise = new npo_src(function (resolve, reject) {
-          var onMessage = function onMessage(event) {
+          _this._onMessage = function (event) {
             if (!isVimeoUrl(event.origin) || _this.element.contentWindow !== event.source) {
               return;
             }
@@ -1423,11 +1525,7 @@ function (module, __webpack_exports__, __webpack_require__) {
             processData(_this, data);
           };
 
-          if (win.addEventListener) {
-            win.addEventListener('message', onMessage, false);
-          } else if (win.attachEvent) {
-            win.attachEvent('onmessage', onMessage);
-          }
+          _this._window.addEventListener('message', _this._onMessage);
 
           if (_this.element.nodeName !== 'IFRAME') {
             var params = getOEmbedParameters(element, options);
@@ -1451,6 +1549,25 @@ function (module, __webpack_exports__, __webpack_require__) {
 
         if (this.element.nodeName === 'IFRAME') {
           postMessage(this, 'ping');
+        }
+
+        if (screenfull.isEnabled) {
+          var exitFullscreen = function exitFullscreen() {
+            return screenfull.exit();
+          };
+
+          screenfull.on('fullscreenchange', function () {
+            if (screenfull.isFullscreen) {
+              storeCallback(_this, 'event:exitFullscreen', exitFullscreen);
+            } else {
+              removeCallback(_this, 'event:exitFullscreen', exitFullscreen);
+            } // eslint-disable-next-line
+
+
+            _this.ready().then(function () {
+              postMessage(_this, 'fullscreenchange', screenfull.isFullscreen);
+            });
+          });
         }
 
         return this;
@@ -1804,6 +1921,48 @@ function (module, __webpack_exports__, __webpack_require__) {
           return this.callMethod('play');
         }
         /**
+         * Request that the player enters fullscreen.
+         * @return {Promise}
+         */
+
+      }, {
+        key: "requestFullscreen",
+        value: function requestFullscreen() {
+          if (screenfull.isEnabled) {
+            return screenfull.request(this.element);
+          }
+
+          return this.callMethod('requestFullscreen');
+        }
+        /**
+         * Request that the player exits fullscreen.
+         * @return {Promise}
+         */
+
+      }, {
+        key: "exitFullscreen",
+        value: function exitFullscreen() {
+          if (screenfull.isEnabled) {
+            return screenfull.exit();
+          }
+
+          return this.callMethod('exitFullscreen');
+        }
+        /**
+         * Returns true if the player is currently fullscreen.
+         * @return {Promise}
+         */
+
+      }, {
+        key: "getFullscreen",
+        value: function getFullscreen() {
+          if (screenfull.isEnabled) {
+            return npo_src.resolve(screenfull.isFullscreen);
+          }
+
+          return this.get('fullscreen');
+        }
+        /**
          * A promise to unload the video.
          *
          * @promise UnloadPromise
@@ -1848,6 +2007,8 @@ function (module, __webpack_exports__, __webpack_require__) {
             if (_this5.element && _this5.element.nodeName === 'IFRAME' && _this5.element.parentNode) {
               _this5.element.parentNode.removeChild(_this5.element);
             }
+
+            _this5._window.removeEventListener('message', _this5._onMessage);
 
             resolve();
           });
@@ -1915,6 +2076,51 @@ function (module, __webpack_exports__, __webpack_require__) {
         key: "getBuffered",
         value: function getBuffered() {
           return this.get('buffered');
+        }
+        /**
+         * A representation of a chapter.
+         *
+         * @typedef {Object} VimeoChapter
+         * @property {number} startTime The start time of the chapter.
+         * @property {object} title The title of the chapter.
+         * @property {number} index The place in the order of Chapters. Starts at 1.
+         */
+
+        /**
+         * A promise to get chapters for the video.
+         *
+         * @promise GetChaptersPromise
+         * @fulfill {VimeoChapter[]} The chapters for the video.
+         */
+
+        /**
+         * Get an array of all the chapters for the video.
+         *
+         * @return {GetChaptersPromise}
+         */
+
+      }, {
+        key: "getChapters",
+        value: function getChapters() {
+          return this.get('chapters');
+        }
+        /**
+         * A promise to get the currently active chapter.
+         *
+         * @promise GetCurrentChaptersPromise
+         * @fulfill {VimeoChapter|undefined} The current chapter for the video.
+         */
+
+        /**
+         * Get the currently active chapter for the video.
+         *
+         * @return {GetCurrentChaptersPromise}
+         */
+
+      }, {
+        key: "getCurrentChapter",
+        value: function getCurrentChapter() {
+          return this.get('currentChapter');
         }
         /**
          * A promise to get the color of the player.
@@ -2443,6 +2649,7 @@ function (module, __webpack_exports__, __webpack_require__) {
 
 
     if (!isNode) {
+      screenfull = initializeScreenfull();
       initializeEmbeds();
       resizeEmbeds();
     }
@@ -3679,8 +3886,6 @@ function (module, __webpack_exports__, __webpack_require__) {
   var player_Player = /*#__PURE__*/function (_base_player_BasePlay) {
     _inheritsLoose(player_Player, _base_player_BasePlay);
 
-    var _super = _createSuper(player_Player);
-
     function player_Player() {
       return _base_player_BasePlay.apply(this, arguments) || this;
     }
@@ -3763,8 +3968,6 @@ function (module, __webpack_exports__, __webpack_require__) {
   var html_video_HTMLVideo = /*#__PURE__*/function (_base_provider_BasePr) {
     _inheritsLoose(html_video_HTMLVideo, _base_provider_BasePr);
 
-    var _super2 = _createSuper(html_video_HTMLVideo);
-
     /**
      * HTMLVideo constructor.
      *
@@ -3798,8 +4001,6 @@ function (module, __webpack_exports__, __webpack_require__) {
 
   var youtube_player_Player = /*#__PURE__*/function (_base_player_BasePlay2) {
     _inheritsLoose(youtube_player_Player, _base_player_BasePlay2);
-
-    var _super3 = _createSuper(youtube_player_Player);
 
     function youtube_player_Player() {
       return _base_player_BasePlay2.apply(this, arguments) || this;
@@ -3945,8 +4146,6 @@ function (module, __webpack_exports__, __webpack_require__) {
   var youtube_YouTube = /*#__PURE__*/function (_base_provider_BasePr2) {
     _inheritsLoose(youtube_YouTube, _base_provider_BasePr2);
 
-    var _super4 = _createSuper(youtube_YouTube);
-
     /**
      * YouTube constructor.
      *
@@ -4061,8 +4260,6 @@ function (module, __webpack_exports__, __webpack_require__) {
   var vimeo_player_Player = /*#__PURE__*/function (_base_player_BasePlay3) {
     _inheritsLoose(vimeo_player_Player, _base_player_BasePlay3);
 
-    var _super5 = _createSuper(vimeo_player_Player);
-
     function vimeo_player_Player() {
       return _base_player_BasePlay3.apply(this, arguments) || this;
     }
@@ -4148,8 +4345,6 @@ function (module, __webpack_exports__, __webpack_require__) {
   var vimeo_Vimeo = /*#__PURE__*/function (_base_provider_BasePr3) {
     _inheritsLoose(vimeo_Vimeo, _base_provider_BasePr3);
 
-    var _super6 = _createSuper(vimeo_Vimeo);
-
     /**
      * Vimeo constructor.
      *
@@ -4172,8 +4367,6 @@ function (module, __webpack_exports__, __webpack_require__) {
 
   var facebook_player_Player = /*#__PURE__*/function (_base_player_BasePlay4) {
     _inheritsLoose(facebook_player_Player, _base_player_BasePlay4);
-
-    var _super7 = _createSuper(facebook_player_Player);
 
     function facebook_player_Player(Splide, Components, slide) {
       var _this15;
@@ -4259,8 +4452,6 @@ function (module, __webpack_exports__, __webpack_require__) {
   var facebook_Facebook = /*#__PURE__*/function (_base_provider_BasePr4) {
     _inheritsLoose(facebook_Facebook, _base_provider_BasePr4);
 
-    var _super8 = _createSuper(facebook_Facebook);
-
     function facebook_Facebook(Splide, Components) {
       var _this16;
 
@@ -4272,6 +4463,127 @@ function (module, __webpack_exports__, __webpack_require__) {
     }
 
     return facebook_Facebook;
+  }(base_provider_BaseProvider); // CONCATENATED MODULE: ./src/js/providers/youku/player.js
+
+
+  var youku_player_Player = /*#__PURE__*/function (_base_player_BasePlay5) {
+    _inheritsLoose(youku_player_Player, _base_player_BasePlay5);
+
+    function youku_player_Player(Splide, Components, slide) {
+      var _this17;
+
+      _this17 = _base_player_BasePlay5.call(this, Splide, Components, slide) || this;
+      _this17.iframe = null;
+      _this17.iframeContainer = null;
+
+      if (_this17.isHandlingClicks()) {
+        _this17.onSlideMoved();
+      }
+
+      _this17.lastActiveState = false;
+      return _this17;
+    }
+
+    var _proto8 = youku_player_Player.prototype;
+
+    _proto8.destroy = function destroy() {
+      _base_player_BasePlay5.prototype.destroy.call(this);
+    };
+
+    _proto8.createPlayer = function createPlayer(readyCallback) {
+      if (readyCallback === void 0) {
+        readyCallback = null;
+      }
+
+      var that = this;
+      $(document).ready(function () {
+        that.resizeYouku();
+      });
+      $(window).resize(that.resizeYouku.bind(that));
+      var videoId = this.videoId;
+      var href = "https://player.youku.com/embed/" + this.videoId;
+      var videoIframeString = "<iframe scrolling=\"no\" frameborder=\"0\" id=\"player\" src=\"" + href + "\" allowfullscreen=\"true\" style=\"position: absolute; z-index: 10; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;\"></iframe>";
+      this.iframeContainer = this.slide.querySelector('.splide__video');
+      this.iframeContainer.innerHTML = videoIframeString;
+      this.iframe = this.slide.querySelector('.splide__video > iframe');
+      return null;
+    };
+
+    _proto8.clearPlayer = function clearPlayer() {
+      this.iframeContainer.innerHTML = '';
+      this.state.set(NOT_INITIALIZED);
+    };
+
+    _proto8.onSlideMoved = function onSlideMoved() {
+      var that = this;
+      var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.attributeName === "class") {
+            var attributeValue = $(mutation.target).prop(mutation.attributeName);
+
+            if (attributeValue.match(/is-active/i)) {
+              that.lastActiveState = true;
+            } else {
+              if (that.lastActiveState) {
+                that.clearPlayer();
+              }
+
+              that.lastActiveState = false;
+            }
+          }
+        });
+      });
+      observer.observe(this.slide, {
+        attributes: true
+      });
+    };
+
+    _proto8.resizeYouku = function resizeYouku() {
+      var thisSlide = $(this.slide);
+      var containerWidth = thisSlide.width();
+      var iframeOldWidth = $(thisSlide).find("iframe").width();
+      var iframeOldHeight = $(thisSlide).find("iframe").height();
+      $(thisSlide).find("iframe").attr("width", containerWidth);
+      var containerHeight = $(this.slide).height();
+      var frameHeight = iframeOldHeight * (containerWidth / iframeOldWidth);
+      var frameTop = (containerHeight - frameHeight) / 2;
+      $(thisSlide).find("iframe").attr("height", frameHeight);
+
+      if (frameTop > 0) {
+        $(thisSlide).find("iframe").css("top", frameTop);
+      }
+    };
+
+    _proto8.findVideoId = function findVideoId() {
+      var url = this.slide.getAttribute('data-splide-youku');
+      var regExp = /\/v_show\/id_([0-9A-Z_]+)/i;
+      var match = url.match(regExp);
+      var videoId = match && match[1] ? match[1] : '';
+      return videoId;
+    };
+
+    _proto8.playVideo = function playVideo() {};
+
+    _proto8.pauseVideo = function pauseVideo() {};
+
+    return youku_player_Player;
+  }(base_player_BasePlayer); // CONCATENATED MODULE: ./src/js/providers/youku/index.js
+
+
+  var youku_Youku = /*#__PURE__*/function (_base_provider_BasePr5) {
+    _inheritsLoose(youku_Youku, _base_provider_BasePr5);
+
+    function youku_Youku(Splide, Components) {
+      var _this18;
+
+      _this18 = _base_provider_BasePr5.call(this, Splide, Components) || this;
+
+      _this18.createPlayers(youku_player_Player, 'data-splide-youku');
+
+      return _this18;
+    }
+
+    return youku_Youku;
   }(base_provider_BaseProvider); // CONCATENATED MODULE: ./src/js/providers/index.js
 
   /**
@@ -4286,7 +4598,8 @@ function (module, __webpack_exports__, __webpack_require__) {
     HtmlVideo: html_video_HTMLVideo,
     YouTube: youtube_YouTube,
     Vimeo: vimeo_Vimeo,
-    Facebook: facebook_Facebook
+    Facebook: facebook_Facebook,
+    Youku: youku_Youku
   }; // CONCATENATED MODULE: ./src/js/constants/defaults.js
 
   /**
@@ -4382,7 +4695,7 @@ function (module, __webpack_exports__, __webpack_require__) {
     var activeSlide;
     /**
      * Store provider components.
-     *
+     * 
      * @type {Object[]}
      */
 
@@ -4397,7 +4710,7 @@ function (module, __webpack_exports__, __webpack_require__) {
           Splide.options.video = {};
         }
 
-        Splide.options.video = _extends({}, DEFAULTS, {}, Splide.options.video);
+        Splide.options.video = _extends({}, DEFAULTS, Splide.options.video);
         each(PROVIDERS, function (Provider) {
           Providers.push(new Provider(Splide, Components));
         });

@@ -2737,10 +2737,10 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Object}   obj      - An object.
  * @param {function} callback - A export function handling each value. Arguments are value, property and index.
  */
-function each( obj, callback ) {
-	Object.keys( obj ).some( ( key, index ) => {
-		return callback( obj[ key ], key, index );
-	} );
+function each(obj, callback) {
+  Object.keys(obj).some(function (key, index) {
+    return callback(obj[key], key, index);
+  });
 }
 // CONCATENATED MODULE: ./src/js/providers/base/base-provider.js
 /**
@@ -2750,65 +2750,76 @@ function each( obj, callback ) {
  * @copyright Naotoshi Fujita. All rights reserved.
  */
 
-
-
-
 /**
  * The sub component for the provider.
  */
-class base_provider_BaseProvider {
-	/**
-	 * BaseProvider constructor.
-	 *
-	 * @param {Splide} Splide     - A Splide instance.
-	 * @param {Object} Components - An object containing components.
-	 */
-	constructor( Splide, Components ) {
-		this.Splide     = Splide;
-		this.Components = Components;
-		this.players    = [];
-	}
 
-	/**
-	 * Create all players.
-	 *
-	 * @param {Player} Player        - A Player class.
-	 * @param {string} attributeName - attribute name for a video URL.
-	 */
-	createPlayers( Player, attributeName ) {
-		this.Components.Elements.getSlides( true ).forEach( Slide => {
-			if ( this.Components.Grid ) {
-				each( Slide.slide.querySelectorAll( `.${ this.Components.Grid.colClass }` ), slide => {
-					this.createPlayer( slide, Player, attributeName );
-				} );
-			}
+var base_provider_BaseProvider = /*#__PURE__*/function () {
+  /**
+   * BaseProvider constructor.
+   *
+   * @param {Splide} Splide     - A Splide instance.
+   * @param {Object} Components - An object containing components.
+   */
+  function BaseProvider(Splide, Components) {
+    this.Splide = Splide;
+    this.Components = Components;
+    this.players = [];
+  }
+  /**
+   * Create all players.
+   *
+   * @param {Player} Player        - A Player class.
+   * @param {string} attributeName - attribute name for a video URL.
+   */
 
-			this.createPlayer( Slide.slide, Player, attributeName );
-		} );
-	}
 
-	/**
-	 * Create a player.
-	 *
-	 * @param {Element} slide         - A slide element.
-	 * @param {Player}  Player        - A Player class.
-	 * @param {string}  attributeName - attribute name for a video URL.
-	 */
-	createPlayer( slide, Player, attributeName ) {
-		const data = slide.getAttribute( attributeName );
+  var _proto = BaseProvider.prototype;
 
-		if ( data ) {
-			this.players.push( new Player( this.Splide, this.Components, slide ) );
-		}
-	}
+  _proto.createPlayers = function createPlayers(Player, attributeName) {
+    var _this = this;
 
-	/**
-	 * Destroy.
-	 */
-	destroy() {
-		this.players.forEach( player => { player.destroy() } );
-	}
-}
+    this.Components.Elements.getSlides(true).forEach(function (Slide) {
+      if (_this.Components.Grid) {
+        each(Slide.slide.querySelectorAll("." + _this.Components.Grid.colClass), function (slide) {
+          _this.createPlayer(slide, Player, attributeName);
+        });
+      }
+
+      _this.createPlayer(Slide.slide, Player, attributeName);
+    });
+  }
+  /**
+   * Create a player.
+   *
+   * @param {Element} slide         - A slide element.
+   * @param {Player}  Player        - A Player class.
+   * @param {string}  attributeName - attribute name for a video URL.
+   */
+  ;
+
+  _proto.createPlayer = function createPlayer(slide, Player, attributeName) {
+    var data = slide.getAttribute(attributeName);
+
+    if (data) {
+      this.players.push(new Player(this.Splide, this.Components, slide));
+    }
+  }
+  /**
+   * Destroy.
+   */
+  ;
+
+  _proto.destroy = function destroy() {
+    this.players.forEach(function (player) {
+      player.destroy();
+    });
+  };
+
+  return BaseProvider;
+}();
+
+
 // CONCATENATED MODULE: ./src/js/elements/index.js
 /**
  * The sub component for creating UI elements.
@@ -2817,22 +2828,19 @@ class base_provider_BaseProvider {
  * @copyright Naotoshi Fujita. All rights reserved.
  */
 
-
 /**
  * The class name of the wrapper element that will be containing video iframe.
  *
  * @type {string}
  */
-const WRAPPER_CLASS = 'splide__video';
-
+var WRAPPER_CLASS = 'splide__video';
 /**
  * The play button class name.
  *
  * @type {string}
  */
-const PLAY_BUTTON_CLASS = 'splide__video__play';
 
-
+var PLAY_BUTTON_CLASS = 'splide__video__play';
 /**
  * The sub component for creating UI elements.
  *
@@ -2841,139 +2849,140 @@ const PLAY_BUTTON_CLASS = 'splide__video__play';
  *
  * @return {Object}
  */
-/* harmony default export */ var js_elements = (function ( Splide, slide ) {
-	/**
-	 * Elements sub component.
-	 *
-	 * @type {Object}
-	 */
-	const Elements = {
-		/**
-		 * Initialization.
-		 */
-		init() {
-			this.initElements();
-			this.toggleWrapper( false );
-			this.togglePlayButton( false );
-		},
 
-		/**
-		 * Create some elements.
-		 */
-		initElements() {
-			const container = findContainer( slide );
+/* harmony default export */ var js_elements = (function (Splide, slide) {
+  /**
+   * Elements sub component.
+   *
+   * @type {Object}
+   */
+  var Elements = {
+    /**
+     * Initialization.
+     */
+    init: function init() {
+      this.initElements();
+      this.toggleWrapper(false);
+      this.togglePlayButton(false);
+    },
 
-			this.parent = container || slide;
+    /**
+     * Create some elements.
+     */
+    initElements: function initElements() {
+      var container = findContainer(slide);
+      this.parent = container || slide;
+      this.className = Splide.classes[container ? 'container' : 'slide'].split(' ')[0] + "--has-video";
+      this.parent.classList.add(this.className);
+      this.wrapper = create('div');
+      this.iframe = create('div');
+      this.playButton = create('button');
+      this.wrapper.classList.add(WRAPPER_CLASS);
+      this.playButton.classList.add(PLAY_BUTTON_CLASS);
+      this.wrapper.appendChild(this.iframe);
+      this.parent.appendChild(this.wrapper);
+      this.parent.appendChild(this.playButton);
+    },
 
-			this.className = `${ Splide.classes[ container ? 'container' : 'slide' ].split( ' ' )[0] }--has-video`;
-			this.parent.classList.add( this.className );
+    /**
+     * Destroy elements.
+     */
+    destroy: function destroy() {
+      this.parent.classList.remove(this.className);
+      remove(this.wrapper);
+      remove(this.playButton);
+    },
 
-			this.wrapper    = create( 'div' );
-			this.iframe     = create( 'div' );
-			this.playButton = create( 'button' );
+    /**
+     * Toggle the play button.
+     *
+     * @param {boolean} show - Set true to show the button.
+     */
+    togglePlayButton: function togglePlayButton(show) {
+      this.playButton.style.display = show ? 'flex' : 'none';
+    },
 
-			this.wrapper.classList.add( WRAPPER_CLASS );
-			this.playButton.classList.add( PLAY_BUTTON_CLASS );
-			this.wrapper.appendChild( this.iframe );
+    /**
+     * Toggle the wrapper element.
+     *
+     * @param {boolean} show - Set true to show the wrapper.
+     */
+    toggleWrapper: function toggleWrapper(show) {
+      this.wrapper.style.display = show ? 'block' : 'none';
+    },
 
-			this.parent.appendChild( this.wrapper );
-			this.parent.appendChild( this.playButton );
-		},
+    /**
+     * Hide the play button and show the wrapper element.
+     */
+    hide: function hide() {
+      this.togglePlayButton(false);
+      this.toggleWrapper(true);
+    },
 
-		/**
-		 * Destroy elements.
-		 */
-		destroy() {
-			this.parent.classList.remove( this.className );
-			remove( this.wrapper );
-			remove( this.playButton );
-		},
+    /**
+     * Show the play button and hide the wrapper element.
+     */
+    show: function show() {
+      this.togglePlayButton(true);
+      this.toggleWrapper(false);
+    }
+  };
+  /**
+   * Find a container element.
+   *
+   * @param {Element} slide - A slide element.
+   *
+   * @return {Element} - A container element if found. Null otherwise.
+   */
 
-		/**
-		 * Toggle the play button.
-		 *
-		 * @param {boolean} show - Set true to show the button.
-		 */
-		togglePlayButton( show ) {
-			this.playButton.style.display = show ? 'flex' : 'none';
-		},
+  function findContainer(slide) {
+    return findChild(slide, Splide.classes['container'].split(' ')[0] || '');
+  }
+  /**
+   * Find a child which has the given class name.
+   *
+   * @param {Element} parent    - A parent element.
+   * @param {string}  className - A class name.
+   *
+   * @return {Element|null} - A found child element if available or null if not.
+   */
 
-		/**
-		 * Toggle the wrapper element.
-		 *
-		 * @param {boolean} show - Set true to show the wrapper.
-		 */
-		toggleWrapper( show ) {
-			this.wrapper.style.display = show ? 'block' : 'none';
-		},
 
-		/**
-		 * Hide the play button and show the wrapper element.
-		 */
-		hide() {
-			this.togglePlayButton( false );
-			this.toggleWrapper( true );
-		},
+  function findChild(parent, className) {
+    return Object.keys(parent.children).map(function (key) {
+      return parent.children[key];
+    }).filter(function (child) {
+      return child.classList.contains(className);
+    })[0] || null;
+  }
+  /**
+   * Create a new element.
+   *
+   * @param {string} tag - A tag name for the element.
+   *
+   * @return {Element} - A created element.
+   */
 
-		/**
-		 * Show the play button and hide the wrapper element.
-		 */
-		show() {
-			this.togglePlayButton( true );
-			this.toggleWrapper( false );
-		},
-	};
 
-	/**
-	 * Find a container element.
-	 *
-	 * @param {Element} slide - A slide element.
-	 *
-	 * @return {Element} - A container element if found. Null otherwise.
-	 */
-	function findContainer( slide ) {
-		return findChild( slide, Splide.classes['container'].split( ' ' )[0] || '' );
-	}
+  function create(tag) {
+    return document.createElement(tag);
+  }
+  /**
+   * Remove the given element.
+   *
+   * @param {Element} elm - An element being removed.
+   */
 
-	/**
-	 * Find a child which has the given class name.
-	 *
-	 * @param {Element} parent    - A parent element.
-	 * @param {string}  className - A class name.
-	 *
-	 * @return {Element|null} - A found child element if available or null if not.
-	 */
-	function findChild( parent, className ) {
-		return Object.keys( parent.children ).map( key => parent.children[ key ] ).filter( child => {
-			return child.classList.contains( className );
-		} )[0] || null;
-	}
 
-	/**
-	 * Create a new element.
-	 *
-	 * @param {string} tag - A tag name for the element.
-	 *
-	 * @return {Element} - A created element.
-	 */
-	function create( tag ) {
-		return document.createElement( tag );
-	}
+  function remove(elm) {
+    var parent = elm.parentElement;
 
-	/**
-	 * Remove the given element.
-	 *
-	 * @param {Element} elm - An element being removed.
-	 */
-	function remove( elm ) {
-		const parent = elm.parentElement;
+    if (parent) {
+      parent.removeChild(elm);
+    }
+  }
 
-		if ( parent ) {
-			parent.removeChild( elm );
-		}
-	}
-
-	return Elements;
+  return Elements;
 });
 // CONCATENATED MODULE: ./src/js/utils/state.js
 /**
@@ -2989,40 +2998,39 @@ const PLAY_BUTTON_CLASS = 'splide__video__play';
  * @param {string|number} initialState - Provide the initial state value.
  */
 /* harmony default export */ var state = (function (initialState) {
-	/**
-	 * Store the current state.
-	 *
-	 * @type {string|number}
-	 */
-	let curr = initialState;
+  /**
+   * Store the current state.
+   *
+   * @type {string|number}
+   */
+  var curr = initialState;
+  return {
+    /**
+     * Change state.
+     *
+     * @param {string|number} state - A new state.
+     */
+    set: function set(state) {
+      curr = state;
+    },
 
-	return {
-		/**
-		 * Change state.
-		 *
-		 * @param {string|number} state - A new state.
-		 */
-		set( state ) {
-			curr = state;
-		},
+    /**
+     * Verify if the current state is given one or not.
+     *
+     * @param {string|number} states - A state name(s) to be verified.
+     *
+     * @return {boolean} - True if the current state is the given one.
+     */
+    is: function is() {
+      for (var i = 0; i < arguments.length; i++) {
+        if ((i < 0 || arguments.length <= i ? undefined : arguments[i]) === curr) {
+          return true;
+        }
+      }
 
-		/**
-		 * Verify if the current state is given one or not.
-		 *
-		 * @param {string|number} states - A state name(s) to be verified.
-		 *
-		 * @return {boolean} - True if the current state is the given one.
-		 */
-		is( ...states ) {
-			for ( let i = 0; i < states.length; i++ ) {
-				if( states[ i ] === curr ) {
-					return true;
-				}
-			}
-
-			return false;
-		},
-	}
+      return false;
+    }
+  };
 });
 // CONCATENATED MODULE: ./src/js/constants/states.js
 /**
@@ -3037,49 +3045,49 @@ const PLAY_BUTTON_CLASS = 'splide__video__play';
  *
  * @type {number}
  */
-const NOT_INITIALIZED = 1;
-
+var NOT_INITIALIZED = 1;
 /**
  * The player is being created.
  *
  * @type {number}
  */
-const CREATING_PLAYER = 2;
 
+var CREATING_PLAYER = 2;
 /**
  * Playing video is requested while creating a player.
  *
  * @type {number}
  */
-const PENDING_PLAY = 3;
 
+var PENDING_PLAY = 3;
 /**
  * Ready to play a video.
  *
  * @type {number}
  */
-const IDLE = 4;
 
+var IDLE = 4;
 /**
  * Loading a video.
  *
  * @type {number}
  */
-const LOADING = 5;
 
+var LOADING = 5;
 /**
  * Play request has been sent to the player, but it is aborted.
  *
  * @type {number}
  */
-const PLAY_REQUEST_ABORTED = 6;
 
+var PLAY_REQUEST_ABORTED = 6;
 /**
  * Playing a video.
  *
  * @type {number}
  */
-const PLAYING = 7;
+
+var PLAYING = 7;
 // CONCATENATED MODULE: ./src/js/providers/base/base-player.js
 /**
  * The base class of the video player.
@@ -3090,302 +3098,344 @@ const PLAYING = 7;
 
 
 
-
-
-
-
 /**
  * The base class of the video player.
  */
-class base_player_BasePlayer {
-	/**
-	 * BasePlayer constructor.
-	 *
-	 * @param {Splide}  Splide     - A Splide instance.
-	 * @param {Object}  Components - An object containing components.
-	 * @param {Element} slide      - A target slide element.
-	 */
-	constructor( Splide, Components, slide ) {
-		this.Splide     = Splide;
-		this.Components = Components;
-		this.slide      = slide;
 
-		this.player    = null;
-		this.elements  = null;
-		this.state     = new state( NOT_INITIALIZED );
+var base_player_BasePlayer = /*#__PURE__*/function () {
+  /**
+   * BasePlayer constructor.
+   *
+   * @param {Splide}  Splide     - A Splide instance.
+   * @param {Object}  Components - An object containing components.
+   * @param {Element} slide      - A target slide element.
+   */
+  function BasePlayer(Splide, Components, slide) {
+    this.Splide = Splide;
+    this.Components = Components;
+    this.slide = slide;
+    this.player = null;
+    this.elements = null;
+    this.state = new state(NOT_INITIALIZED);
+    this.videoId = this.findVideoId();
 
-		this.videoId = this.findVideoId();
-
-		if ( this.videoId ) {
-			this.init();
-			this.bind();
-			this.handleClick();
-		}
- 	}
-
-	/**
-	 * Initialization.
-	 */
-	init() {
-	  this.elements = new js_elements( this.Splide, this.slide );
-	  this.elements.init();
-
-	  this.toggleRootClass( true );
-		this.elements.togglePlayButton( ! this.Splide.options.video.disableOverlayUI );
-
-		if ( this.isAutoplay() && this.isActive() ) {
-			this.play();
-		}
+    if (this.videoId) {
+      this.init();
+      this.bind();
+      this.handleClick();
+    }
   }
+  /**
+   * Initialization.
+   */
 
-	/**
-	 * Setup.
-	 * This must be called after MOUNTED state.
-	 */
-	setup() {
-		this.state.set( CREATING_PLAYER );
 
-		this.player = this.createPlayer( () => {
-			const isPendingPlay = this.state.is( PENDING_PLAY );
-			this.state.set( IDLE );
+  var _proto = BasePlayer.prototype;
 
-			if ( isPendingPlay ) {
-				this.play();
-			}
-		} );
+  _proto.init = function init() {
+    this.elements = new js_elements(this.Splide, this.slide);
+    this.elements.init();
+    this.toggleRootClass(true);
+    this.elements.togglePlayButton(!this.Splide.options.video.disableOverlayUI);
+
+    if (this.isAutoplay() && this.isActive()) {
+      this.play();
+    }
   }
+  /**
+   * Setup.
+   * This must be called after MOUNTED state.
+   */
+  ;
 
-	/**
-	 * Listen to some events.
-	 */
-	bind() {
-	  this.Splide
-		  .on( 'active', Slide => {
-		  	if ( this.isAutoplay() ) {
-		  		if ( Slide.slide === this.slide ) {
-		  			this.play();
-				  } else {
-		  			this.pause();
-				  }
-			  }
-		  } )
-		  .on( 'move', () => { this.pause() } )
-			.on( 'video:click', Player => {
-		    if ( Player.slide !== this.slide ) {
-		      this.pause();
-			  }
-		  } );
+  _proto.setup = function setup() {
+    var _this = this;
+
+    this.state.set(CREATING_PLAYER);
+    this.player = this.createPlayer(function () {
+      var isPendingPlay = _this.state.is(PENDING_PLAY);
+
+      _this.state.set(IDLE);
+
+      if (isPendingPlay) {
+        _this.play();
+      }
+    });
   }
+  /**
+   * Listen to some events.
+   */
+  ;
 
-	/**
-	 * In the fade mode, events will be fired in the order of drag -> dragged -> click,
-	 * which unexpectedly plays the previous video.
-	 */
-  handleClick() {
-    if(!this.isHandlingClicks()) {
+  _proto.bind = function bind() {
+    var _this2 = this;
+
+    this.Splide.on('active', function (Slide) {
+      if (_this2.isAutoplay()) {
+        if (Slide.slide === _this2.slide) {
+          _this2.play();
+        } else {
+          _this2.pause();
+        }
+      }
+    }).on('move', function () {
+      _this2.pause();
+    }).on('video:click', function (Player) {
+      if (Player.slide !== _this2.slide) {
+        _this2.pause();
+      }
+    });
+  }
+  /**
+   * In the fade mode, events will be fired in the order of drag -> dragged -> click,
+   * which unexpectedly plays the previous video.
+   */
+  ;
+
+  _proto.handleClick = function handleClick() {
+    var _this3 = this;
+
+    if (!this.isHandlingClicks()) {
+      return;
+    } // Listen to a native events for grid slides.
+
+
+    this.slide.addEventListener('mousedown', this.onMouseDown.bind(this));
+    this.slide.addEventListener('touchstart', this.onMouseDown.bind(this));
+    this.slide.addEventListener('mouseup', this.onMouseUp.bind(this));
+    this.slide.addEventListener('touchend', this.onMouseUp.bind(this)); // Interrupt playing the video because the slider starts being dragged.
+
+    this.Splide.on('drag', function () {
+      _this3.shouldHandleClick = false;
+    });
+  }
+  /**
+   * Create a player.
+   * This must be overridden in a child class.
+   *
+   * @param {function} readyCallback
+   *
+   * @return {null} - Always null.
+   */
+  ;
+
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
+
+    return null;
+  }
+  /**
+   * Play the video.
+   */
+  ;
+
+  _proto.play = function play() {
+    var _this4 = this;
+
+    if (this.state.is(NOT_INITIALIZED)) {
+      this.setup();
+    }
+
+    if (this.state.is(PLAYING, PENDING_PLAY)) {
+      return;
+    } // Hide immediately for UX.
+
+
+    setTimeout(function () {
+      _this4.elements.hide();
+    }); // Pending play because the player is being created now.
+
+    if (this.state.is(CREATING_PLAYER)) {
+      this.state.set(PENDING_PLAY);
+      return;
+    } // Play request is canceled but requested again.
+
+
+    if (this.state.is(PLAY_REQUEST_ABORTED)) {
+      this.state.set(LOADING);
       return;
     }
 
-	  // Listen to a native events for grid slides.
-		this.slide.addEventListener( 'mousedown', this.onMouseDown.bind( this ) );
-		this.slide.addEventListener( 'touchstart', this.onMouseDown.bind( this ) );
-		this.slide.addEventListener( 'mouseup', this.onMouseUp.bind( this ) );
-		this.slide.addEventListener( 'touchend', this.onMouseUp.bind( this ) );
-
-		// Interrupt playing the video because the slider starts being dragged.
-	  this.Splide.on( 'drag', () => { this.shouldHandleClick = false } );
+    this.playVideo();
+    this.state.set(LOADING);
   }
+  /**
+   * Pause the video.
+   */
+  ;
 
-	/**
-	 * Create a player.
-	 * This must be overridden in a child class.
-	 *
-	 * @param {function} readyCallback
-	 *
-	 * @return {null} - Always null.
-	 */
-	createPlayer( readyCallback = null ) {
-		return null;
+  _proto.pause = function pause() {
+    if (!this.Splide.options.video.disableOverlayUI) {
+      this.elements.show();
+    } // Cancel the "pending play" status.
+
+
+    if (this.state.is(PENDING_PLAY)) {
+      this.state.set(CREATING_PLAYER);
+      return;
+    } // The video is paused while being loaded.
+
+
+    if (this.state.is(LOADING)) {
+      this.state.set(PLAY_REQUEST_ABORTED);
+      return;
+    }
+
+    if (this.state.is(PLAYING)) {
+      this.state.set(IDLE);
+      this.pauseVideo();
+    }
   }
+  /**
+   * Play video. Override this if necessary.
+   */
+  ;
 
-	/**
-	 * Play the video.
-	 */
-	play() {
-		if ( this.state.is( NOT_INITIALIZED ) ) {
-			this.setup();
-		}
+  _proto.playVideo = function playVideo() {
+    this.player.play();
+  }
+  /**
+   * Pause video. Override this if necessary.
+   */
+  ;
 
-		if ( this.state.is( PLAYING, PENDING_PLAY ) ) {
-			return;
-		}
+  _proto.pauseVideo = function pauseVideo() {
+    this.player.pause();
+  }
+  /**
+   * Check if the slide is active or not.
+   */
+  ;
 
-		// Hide immediately for UX.
-		setTimeout( () => { this.elements.hide() } );
+  _proto.isActive = function isActive() {
+    return this.slide.classList.contains('is-active');
+  }
+  /**
+   * Check whether a video should be played automatically.
+   *
+   * @return {boolean}
+   */
+  ;
 
-		// Pending play because the player is being created now.
-		if ( this.state.is( CREATING_PLAYER ) ) {
-			this.state.set( PENDING_PLAY );
-			return;
-		}
+  _proto.isAutoplay = function isAutoplay() {
+    return this.Splide.options.video.autoplay;
+  };
 
-		// Play request is canceled but requested again.
-		if ( this.state.is( PLAY_REQUEST_ABORTED ) ) {
-			this.state.set( LOADING );
-			return;
-		}
-
-		this.playVideo();
-		this.state.set( LOADING );
-	}
-
-	/**
-	 * Pause the video.
-	 */
-	pause() {
-		if ( ! this.Splide.options.video.disableOverlayUI ) {
-			this.elements.show();
-		}
-
-		// Cancel the "pending play" status.
-		if ( this.state.is( PENDING_PLAY ) ) {
-			this.state.set( CREATING_PLAYER );
-			return;
-		}
-
-		// The video is paused while being loaded.
-		if ( this.state.is( LOADING ) ) {
-			this.state.set( PLAY_REQUEST_ABORTED );
-			return;
-		}
-
-		if ( this.state.is( PLAYING ) ) {
-			this.state.set( IDLE );
-			this.pauseVideo();
-		}
-	}
-
-	/**
-	 * Play video. Override this if necessary.
-	 */
-	playVideo() {
-		this.player.play();
-	}
-
-	/**
-	 * Pause video. Override this if necessary.
-	 */
-	pauseVideo() {
-		this.player.pause();
-	}
-
-	/**
-	 * Check if the slide is active or not.
-	 */
-	isActive() {
-		return this.slide.classList.contains( 'is-active' );
-	}
-
-	/**
-	 * Check whether a video should be played automatically.
-	 *
-	 * @return {boolean}
-	 */
-	isAutoplay() {
-		return this.Splide.options.video.autoplay;
-	}
-
-  isHandlingClicks() {
+  _proto.isHandlingClicks = function isHandlingClicks() {
     return this.Splide.options.video.handlingClicks;
   }
+  /**
+   * Find the video ID from the HTML.
+   *
+   * @return {string|number}
+   */
+  ;
 
-	/**
-	 * Find the video ID from the HTML.
-	 *
-	 * @return {string|number}
-	 */
-	findVideoId() {
-		return '';
-	}
+  _proto.findVideoId = function findVideoId() {
+    return '';
+  }
+  /**
+   * Toggle the root class.
+   *
+   * @param {boolean} add - Whether to add a class or not.
+   */
+  ;
 
-	/**
-	 * Toggle the root class.
-	 *
-	 * @param {boolean} add - Whether to add a class or not.
-	 */
-	toggleRootClass( add ) {
-		this.Splide.root.classList[ add ? 'add' : 'remove' ]( this.Splide.classes.root.split( ' ' )[0] + '--has-video' );
-	}
+  _proto.toggleRootClass = function toggleRootClass(add) {
+    this.Splide.root.classList[add ? 'add' : 'remove'](this.Splide.classes.root.split(' ')[0] + '--has-video');
+  }
+  /**
+   * Called on mousedown or touchstart.
+   * Request playing the video on mouseup or touchend.
+   * This may be interrupted a drag event.
+   */
+  ;
 
-	/**
-	 * Called on mousedown or touchstart.
-	 * Request playing the video on mouseup or touchend.
-	 * This may be interrupted a drag event.
-	 */
-	onMouseDown() {
-		this.shouldHandleClick = true;
-	}
+  _proto.onMouseDown = function onMouseDown() {
+    this.shouldHandleClick = true;
+  }
+  /**
+   * Called on mouseup or touchend.
+   * If the shouldHandleClick is still true, play the video.
+   */
+  ;
 
-	/**
-	 * Called on mouseup or touchend.
-	 * If the shouldHandleClick is still true, play the video.
-	 */
-	onMouseUp() {
-		if ( this.shouldHandleClick ) {
-			this.Splide.emit( 'video:click', this );
-			this.play();
-		}
-	}
+  _proto.onMouseUp = function onMouseUp() {
+    if (this.shouldHandleClick) {
+      this.Splide.emit('video:click', this);
+      this.play();
+    }
+  }
+  /**
+   * Called when the player is playing a video.
+   */
+  ;
 
-	/**
-	 * Called when the player is playing a video.
-	 */
-	onPlay() {
-		if ( this.state.is( PLAY_REQUEST_ABORTED ) ) {
-			this.state.set( PLAYING );
-			this.pause();
-		} else {
-			this.Splide.emit( 'video:play', this );
-			this.state.set( PLAYING );
-		}
-	}
+  _proto.onPlay = function onPlay() {
+    if (this.state.is(PLAY_REQUEST_ABORTED)) {
+      this.state.set(PLAYING);
+      this.pause();
+    } else {
+      this.Splide.emit('video:play', this);
+      this.state.set(PLAYING);
+    }
+  }
+  /**
+   * Called when the player is paused a video.
+   */
+  ;
 
-	/**
-	 * Called when the player is paused a video.
-	 */
-	onPause() {
-		this.Splide.emit( 'video:pause', this );
-		this.state.set( IDLE );
-	}
+  _proto.onPause = function onPause() {
+    this.Splide.emit('video:pause', this);
+    this.state.set(IDLE);
+  }
+  /**
+   * Called when the video is ended.
+   */
+  ;
 
-	/**
-	 * Called when the video is ended.
-	 */
-	onEnded() {
-		this.Splide.emit( 'video:ended', this );
-		this.state.set( IDLE );
-	}
+  _proto.onEnded = function onEnded() {
+    this.Splide.emit('video:ended', this);
+    this.state.set(IDLE);
+  }
+  /**
+   * Destroy the player.
+   */
+  ;
 
-	/**
-	 * Destroy the player.
-	 */
-	destroy() {
-		if ( this.player ) {
-			this.player.destroy();
-			this.player = null;
-		}
+  _proto.destroy = function destroy() {
+    if (this.player) {
+      this.player.destroy();
+      this.player = null;
+    }
 
-		this.toggleRootClass( false );
-		this.elements.destroy();
+    this.toggleRootClass(false);
+    this.elements.destroy();
+    this.slide.removeEventListener('mousedown', this.onMouseDown.bind(this));
+    this.slide.removeEventListener('touchstart', this.onMouseDown.bind(this));
+    this.slide.removeEventListener('mouseup', this.onMouseUp.bind(this));
+    this.slide.removeEventListener('touchend', this.onMouseUp.bind(this));
+  };
 
-		this.slide.removeEventListener( 'mousedown', this.onMouseDown.bind( this ) );
-		this.slide.removeEventListener( 'touchstart', this.onMouseDown.bind( this ) );
-		this.slide.removeEventListener( 'mouseup', this.onMouseUp.bind( this ) );
-		this.slide.removeEventListener( 'touchend', this.onMouseUp.bind( this ) );
+  return BasePlayer;
+}();
 
-	}
-}
+
 // CONCATENATED MODULE: ./src/js/providers/html-video/player.js
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
 /**
  * The class for controlling a HTML video.
  *
@@ -3393,71 +3443,96 @@ class base_player_BasePlayer {
  * @copyright Naotoshi Fujita. All rights reserved.
  */
 
-
-
 /**
  * The class for controlling a HTML video.
  */
-class player_Player extends base_player_BasePlayer {
-	/**
-	 * Create a player.
-	 *
-	 * @param {function} readyCallback - Callback function triggered when the player gets ready.
-	 *
-	 * @return {object|null} - A created player object.
-	 */
-	createPlayer( readyCallback = null ) {
-		const options = this.Splide.options.video;
 
-		const player = document.createElement( 'video' );
-		player.src = this.videoId;
+var player_Player = /*#__PURE__*/function (_BasePlayer) {
+  _inheritsLoose(Player, _BasePlayer);
 
-		this.elements.iframe.appendChild( player );
+  var _super = _createSuper(Player);
 
-		player.controls = ! options.hideControls;
-		player.loop     = options.loop;
+  function Player() {
+    return _BasePlayer.apply(this, arguments) || this;
+  }
 
-		player.addEventListener( 'play', this.onPlay.bind( this ) );
-		player.addEventListener( 'pause', this.onPause.bind( this ) );
-		player.addEventListener( 'ended', this.onEnded.bind( this ) );
+  var _proto = Player.prototype;
 
-		player.volume = Math.max( Math.min( options.volume, 1 ), 0 );
-		player.muted  = options.mute;
+  /**
+   * Create a player.
+   *
+   * @param {function} readyCallback - Callback function triggered when the player gets ready.
+   *
+   * @return {object|null} - A created player object.
+   */
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
 
-		if ( readyCallback ) {
-			player.addEventListener( 'loadeddata', readyCallback );
-		}
+    var options = this.Splide.options.video;
+    var player = document.createElement('video');
+    player.src = this.videoId;
+    this.elements.iframe.appendChild(player);
+    player.controls = !options.hideControls;
+    player.loop = options.loop;
+    player.addEventListener('play', this.onPlay.bind(this));
+    player.addEventListener('pause', this.onPause.bind(this));
+    player.addEventListener('ended', this.onEnded.bind(this));
+    player.volume = Math.max(Math.min(options.volume, 1), 0);
+    player.muted = options.mute;
 
-		return player;
-	}
+    if (readyCallback) {
+      player.addEventListener('loadeddata', readyCallback);
+    }
 
-	/**
-	 * Find the video ID from the HTML.
-	 * Use the given path or URL as ID for a raw video.
-	 *
-	 * @return {string} - Video ID(path or URL).
-	 */
-	findVideoId(){
-		return this.slide.getAttribute( 'data-splide-html-video' );
-	}
+    return player;
+  }
+  /**
+   * Find the video ID from the HTML.
+   * Use the given path or URL as ID for a raw video.
+   *
+   * @return {string} - Video ID(path or URL).
+   */
+  ;
 
-	/**
-	 * Destroy.
-	 */
-	destroy() {
-		if ( this.player ) {
-			this.player.pause();
-			this.player.removeAttribute( 'src' );
-			this.player.load();
+  _proto.findVideoId = function findVideoId() {
+    return this.slide.getAttribute('data-splide-html-video');
+  }
+  /**
+   * Destroy.
+   */
+  ;
 
-			this.elements.iframe.removeChild( this.player );
-			this.player = null;
-		}
+  _proto.destroy = function destroy() {
+    if (this.player) {
+      this.player.pause();
+      this.player.removeAttribute('src');
+      this.player.load();
+      this.elements.iframe.removeChild(this.player);
+      this.player = null;
+    }
 
-		this.elements.destroy();
-	}
-}
+    this.elements.destroy();
+  };
+
+  return Player;
+}(base_player_BasePlayer);
+
+
 // CONCATENATED MODULE: ./src/js/providers/html-video/index.js
+function html_video_createSuper(Derived) { return function () { var Super = html_video_getPrototypeOf(Derived), result; if (html_video_isNativeReflectConstruct()) { var NewTarget = html_video_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return html_video_possibleConstructorReturn(this, result); }; }
+
+function html_video_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return html_video_assertThisInitialized(self); }
+
+function html_video_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function html_video_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function html_video_getPrototypeOf(o) { html_video_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return html_video_getPrototypeOf(o); }
+
+function html_video_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
 /**
  * The sub component for embedding a HTML video.
  *
@@ -3466,24 +3541,48 @@ class player_Player extends base_player_BasePlayer {
  */
 
 
-
-
 /**
  * The sub component for embedding a HTML video.
  */
-class html_video_HTMLVideo extends base_provider_BaseProvider {
-	/**
-	 * HTMLVideo constructor.
-	 *
-	 * @param {Splide} Splide     - A Splide instance.
-	 * @param {Object} Components - An object containing components.
-	 */
-	constructor( Splide, Components ) {
-		super( Splide, Components );
-		this.createPlayers( player_Player, 'data-splide-html-video' );
-	}
-}
+
+var html_video_HTMLVideo = /*#__PURE__*/function (_BaseProvider) {
+  html_video_inheritsLoose(HTMLVideo, _BaseProvider);
+
+  var _super = html_video_createSuper(HTMLVideo);
+
+  /**
+   * HTMLVideo constructor.
+   *
+   * @param {Splide} Splide     - A Splide instance.
+   * @param {Object} Components - An object containing components.
+   */
+  function HTMLVideo(Splide, Components) {
+    var _this;
+
+    _this = _BaseProvider.call(this, Splide, Components) || this;
+
+    _this.createPlayers(player_Player, 'data-splide-html-video');
+
+    return _this;
+  }
+
+  return HTMLVideo;
+}(base_provider_BaseProvider);
+
+
 // CONCATENATED MODULE: ./src/js/providers/youtube/player.js
+function player_createSuper(Derived) { return function () { var Super = player_getPrototypeOf(Derived), result; if (player_isNativeReflectConstruct()) { var NewTarget = player_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return player_possibleConstructorReturn(this, result); }; }
+
+function player_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return player_assertThisInitialized(self); }
+
+function player_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function player_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function player_getPrototypeOf(o) { player_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return player_getPrototypeOf(o); }
+
+function player_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
 /**
  * The class for controlling YouTube video.
  *
@@ -3491,124 +3590,157 @@ class html_video_HTMLVideo extends base_provider_BaseProvider {
  * @copyright Naotoshi Fujita. All rights reserved.
  */
 
-
-
-
 /**
  * The class for controlling YouTube video.
  */
-class youtube_player_Player extends base_player_BasePlayer {
-	/**
-	 * Create a player.
-	 *
-	 * @param {function} readyCallback - Callback function triggered when the player gets ready.
-	 *
-	 * @return {object|null} - A created player object.
-	 */
-	createPlayer( readyCallback = null ) {
-		const options = this.Splide.options.video;
 
-		const player = new YT.Player( this.elements.iframe, {
-			videoId: this.videoId,
-			playerVars: {
-				fs            : options.disableFullScreen,
-				controls      : options.hideControls,
-				iv_load_policy: 3,
-				loop          : options.loop,
-				playlist      : options.loop ? this.videoId : '',
-				rel           : 0,
-				autoplay      : false,
-			},
-			events: {
-				'onReady': e => {
-					this.onPlayerReady( e );
+var youtube_player_Player = /*#__PURE__*/function (_BasePlayer) {
+  player_inheritsLoose(Player, _BasePlayer);
 
-					if ( readyCallback ) {
-						readyCallback();
-					}
-				},
-				'onStateChange': this.onPlayerStateChange.bind( this ),
-			}
-		} );
+  var _super = player_createSuper(Player);
 
-		return player;
-	}
+  function Player() {
+    return _BasePlayer.apply(this, arguments) || this;
+  }
 
-	/**
-	 * Called when the YouTube player is ready.
-	 *
-	 * @param {Object} e - An event object.
-	 */
-	onPlayerReady( e ) {
-		const player  = e.target;
-		const options = this.Splide.options.video;
+  var _proto = Player.prototype;
 
-		if ( options.mute ) {
-			player.mute();
-		}
+  /**
+   * Create a player.
+   *
+   * @param {function} readyCallback - Callback function triggered when the player gets ready.
+   *
+   * @return {object|null} - A created player object.
+   */
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    var _this = this;
 
-		player.setVolume( Math.max( Math.min( options.volume * 100, 100 ), 0 ) );
-	}
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
 
-	/**
-	 * Called when the YouTube player state is changed.
-	 *
-	 * @param {Object} e - An event object.
-	 */
-	onPlayerStateChange( e ) {
-		const { PLAYING, PAUSED, ENDED } = YT.PlayerState;
+    var options = this.Splide.options.video;
+    var player = new YT.Player(this.elements.iframe, {
+      videoId: this.videoId,
+      playerVars: {
+        fs: options.disableFullScreen,
+        controls: options.hideControls,
+        iv_load_policy: 3,
+        loop: options.loop,
+        playlist: options.loop ? this.videoId : '',
+        rel: 0,
+        autoplay: false
+      },
+      events: {
+        'onReady': function onReady(e) {
+          _this.onPlayerReady(e);
 
-		switch ( true ) {
-			case e.data === PLAYING:
-				this.onPlay();
-				break;
+          if (readyCallback) {
+            readyCallback();
+          }
+        },
+        'onStateChange': this.onPlayerStateChange.bind(this)
+      }
+    });
+    return player;
+  }
+  /**
+   * Called when the YouTube player is ready.
+   *
+   * @param {Object} e - An event object.
+   */
+  ;
 
-			case e.data === PAUSED:
-				this.onPause();
-				break;
+  _proto.onPlayerReady = function onPlayerReady(e) {
+    var player = e.target;
+    var options = this.Splide.options.video;
 
-			case e.data === ENDED:
-				this.onEnded();
-				break;
-		}
-	}
+    if (options.mute) {
+      player.mute();
+    }
 
-	/**
-	 * Play video.
-	 */
-	playVideo() {
-		this.player.playVideo();
-	}
+    player.setVolume(Math.max(Math.min(options.volume * 100, 100), 0));
+  }
+  /**
+   * Called when the YouTube player state is changed.
+   *
+   * @param {Object} e - An event object.
+   */
+  ;
 
-	/**
-	 * Pause video.
-	 */
-	pauseVideo() {
-		this.player.pauseVideo();
-	}
+  _proto.onPlayerStateChange = function onPlayerStateChange(e) {
+    var _YT$PlayerState = YT.PlayerState,
+        PLAYING = _YT$PlayerState.PLAYING,
+        PAUSED = _YT$PlayerState.PAUSED,
+        ENDED = _YT$PlayerState.ENDED;
 
-	/**
-	 * Find the video ID from the HTML.
-	 *
-	 * @return {string} - Video ID.
-	 */
-	findVideoId(){
-		const url    = this.slide.getAttribute( 'data-splide-youtube' );
-		const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-		const match  = url.match( regExp );
+    switch (true) {
+      case e.data === PLAYING:
+        this.onPlay();
+        break;
 
-		return ( match && match[ 7 ].length === 11 ) ? match[7] : '';
-	}
-}
+      case e.data === PAUSED:
+        this.onPause();
+        break;
+
+      case e.data === ENDED:
+        this.onEnded();
+        break;
+    }
+  }
+  /**
+   * Play video.
+   */
+  ;
+
+  _proto.playVideo = function playVideo() {
+    this.player.playVideo();
+  }
+  /**
+   * Pause video.
+   */
+  ;
+
+  _proto.pauseVideo = function pauseVideo() {
+    this.player.pauseVideo();
+  }
+  /**
+   * Find the video ID from the HTML.
+   *
+   * @return {string} - Video ID.
+   */
+  ;
+
+  _proto.findVideoId = function findVideoId() {
+    var url = this.slide.getAttribute('data-splide-youtube');
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return match && match[7].length === 11 ? match[7] : '';
+  };
+
+  return Player;
+}(base_player_BasePlayer);
+
+
 // CONCATENATED MODULE: ./src/js/providers/youtube/index.js
+function youtube_createSuper(Derived) { return function () { var Super = youtube_getPrototypeOf(Derived), result; if (youtube_isNativeReflectConstruct()) { var NewTarget = youtube_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return youtube_possibleConstructorReturn(this, result); }; }
+
+function youtube_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return youtube_assertThisInitialized(self); }
+
+function youtube_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function youtube_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function youtube_getPrototypeOf(o) { youtube_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return youtube_getPrototypeOf(o); }
+
+function youtube_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
 /**
  * The sub component for embedding a YouTube video.
  *
  * @author    Naotoshi Fujita
  * @copyright Naotoshi Fujita. All rights reserved.
  */
-
-
 
 
 /**
@@ -3616,98 +3748,130 @@ class youtube_player_Player extends base_player_BasePlayer {
  *
  * @type {string}
  */
-const YOUTUBE_API_SRC = 'https://www.youtube.com/player_api';
 
-
+var YOUTUBE_API_SRC = 'https://www.youtube.com/player_api';
 /**
  * The sub component for embedding a YouTube video.
  */
-class youtube_YouTube extends base_provider_BaseProvider {
-	/**
-	 * YouTube constructor.
-	 *
-	 * @param {Splide} Splide     - A Splide instance.
-	 * @param {Object} Components - An object containing components.
-	 */
-	constructor( Splide, Components ) {
-		super( Splide, Components );
 
-		this.oldCallback = undefined;
+var youtube_YouTube = /*#__PURE__*/function (_BaseProvider) {
+  youtube_inheritsLoose(YouTube, _BaseProvider);
 
-		this.bindAPICallback();
-		this.loadAPI();
-	}
+  var _super = youtube_createSuper(YouTube);
 
-	/**
-	 * Load the YouTube iframe API.
-	 */
-	loadAPI() {
-		const { YT } = window;
+  /**
+   * YouTube constructor.
+   *
+   * @param {Splide} Splide     - A Splide instance.
+   * @param {Object} Components - An object containing components.
+   */
+  function YouTube(Splide, Components) {
+    var _this;
 
-		if ( this.shouldLoadAPI() ) {
-			const tag            = document.createElement( 'script' );
-			const firstScriptTag = document.getElementsByTagName( 'script' )[ 0 ];
-			tag.src = YOUTUBE_API_SRC;
-			firstScriptTag.parentNode.insertBefore( tag, firstScriptTag );
-		} else {
-			if ( YT && YT.loaded ) {
-				// API has been already loaded and the callback has been fired.
-				this.onReady();
-			}
-		}
-	}
+    _this = _BaseProvider.call(this, Splide, Components) || this;
+    _this.oldCallback = undefined;
 
-	/**
-	 * Check whether the API should be loaded or not.
-	 *
-	 * @return {boolean} - True if it should be or false if not.
-	 */
-	shouldLoadAPI() {
-		const scripts = document.getElementsByTagName( 'script' );
+    _this.bindAPICallback();
 
-		for ( let i = 0; i < scripts.length; i++ ) {
-			if ( scripts[ i ].getAttribute( 'src' ) === YOUTUBE_API_SRC ) {
-				return false;
-			}
-		}
+    _this.loadAPI();
 
-		return true;
-	}
+    return _this;
+  }
+  /**
+   * Load the YouTube iframe API.
+   */
 
-	/**
-	 * Listen onYouTubeIframeAPIReady event.
-	 */
-	bindAPICallback() {
-		// Avoid unexpected collision against other libraries.
-		if ( typeof window.onYouTubeIframeAPIReady !== 'undefined' ) {
-			this.oldCallback = window.onYouTubeIframeAPIReady;
-		}
 
-		window.onYouTubeIframeAPIReady = this.onYouTubeIframeAPIReady.bind( this );
-	}
+  var _proto = YouTube.prototype;
 
-	/**
-	 * Called when the API is ready.
-	 */
-	onYouTubeIframeAPIReady() {
-		if ( this.oldCallback ) {
-			this.oldCallback();
-		}
+  _proto.loadAPI = function loadAPI() {
+    var _window = window,
+        YT = _window.YT;
 
-		this.onReady();
-	}
+    if (this.shouldLoadAPI()) {
+      var tag = document.createElement('script');
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      tag.src = YOUTUBE_API_SRC;
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    } else {
+      if (YT && YT.loaded) {
+        // API has been already loaded and the callback has been fired.
+        this.onReady();
+      }
+    }
+  }
+  /**
+   * Check whether the API should be loaded or not.
+   *
+   * @return {boolean} - True if it should be or false if not.
+   */
+  ;
 
-	/**
-	 * Called when the YouTube API is ready.
-	 */
-	onReady() {
-		this.createPlayers( youtube_player_Player, 'data-splide-youtube' );
-	}
-}
+  _proto.shouldLoadAPI = function shouldLoadAPI() {
+    var scripts = document.getElementsByTagName('script');
+
+    for (var i = 0; i < scripts.length; i++) {
+      if (scripts[i].getAttribute('src') === YOUTUBE_API_SRC) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+  /**
+   * Listen onYouTubeIframeAPIReady event.
+   */
+  ;
+
+  _proto.bindAPICallback = function bindAPICallback() {
+    // Avoid unexpected collision against other libraries.
+    if (typeof window.onYouTubeIframeAPIReady !== 'undefined') {
+      this.oldCallback = window.onYouTubeIframeAPIReady;
+    }
+
+    window.onYouTubeIframeAPIReady = this.onYouTubeIframeAPIReady.bind(this);
+  }
+  /**
+   * Called when the API is ready.
+   */
+  ;
+
+  _proto.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+    if (this.oldCallback) {
+      this.oldCallback();
+    }
+
+    this.onReady();
+  }
+  /**
+   * Called when the YouTube API is ready.
+   */
+  ;
+
+  _proto.onReady = function onReady() {
+    this.createPlayers(youtube_player_Player, 'data-splide-youtube');
+  };
+
+  return YouTube;
+}(base_provider_BaseProvider);
+
+
 // EXTERNAL MODULE: ./node_modules/@vimeo/player/dist/player.es.js
 var player_es = __webpack_require__(1);
 
 // CONCATENATED MODULE: ./src/js/providers/vimeo/player.js
+function vimeo_player_createSuper(Derived) { return function () { var Super = vimeo_player_getPrototypeOf(Derived), result; if (vimeo_player_isNativeReflectConstruct()) { var NewTarget = vimeo_player_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return vimeo_player_possibleConstructorReturn(this, result); }; }
+
+function vimeo_player_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return vimeo_player_assertThisInitialized(self); }
+
+function vimeo_player_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function vimeo_player_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function vimeo_player_getPrototypeOf(o) { vimeo_player_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return vimeo_player_getPrototypeOf(o); }
+
+function vimeo_player_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
 /**
  * The class for controlling Vimeo video.
  *
@@ -3717,70 +3881,97 @@ var player_es = __webpack_require__(1);
 
 
 
-
-
 /**
  * The class for controlling Vimeo video.
  */
-class vimeo_player_Player extends base_player_BasePlayer {
-	/**
-	 * Create a player.
-	 *
-	 * @param {function} readyCallback - Callback function triggered when the player gets ready.
-	 *
-	 * @return {object|null} - A created player object.
-	 */
-	createPlayer( readyCallback = null ) {
-		const options = this.Splide.options.video;
 
-		const player = new player_es["a" /* default */]( this.elements.iframe, {
-			id      : this.videoId,
-			controls: ! options.hideControls,
-			loop    : options.loop,
-		} );
+var vimeo_player_Player = /*#__PURE__*/function (_BasePlayer) {
+  vimeo_player_inheritsLoose(Player, _BasePlayer);
 
-		player.on( 'play', this.onPlay.bind( this ) );
-		player.on( 'pause', this.onPause.bind( this ) );
-		player.on( 'ended', this.onEnded.bind( this ) );
+  var _super = vimeo_player_createSuper(Player);
 
-		player.setVolume( Math.max( Math.min( options.volume, 1 ), 0 ) );
-		player.setMuted( options.mute );
+  function Player() {
+    return _BasePlayer.apply(this, arguments) || this;
+  }
 
-		if ( readyCallback ) {
-			player.ready().then( readyCallback );
-		}
+  var _proto = Player.prototype;
 
-		return player;
-	}
+  /**
+   * Create a player.
+   *
+   * @param {function} readyCallback - Callback function triggered when the player gets ready.
+   *
+   * @return {object|null} - A created player object.
+   */
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
 
-	/**
-	 * Find the video ID from the HTML.
-	 *
-	 * @return {string} - Video ID.
-	 */
-	findVideoId(){
-		const url    = this.slide.getAttribute( 'data-splide-vimeo' );
-		const regExp = /vimeo.com\/(\d+)/;
-		const match  = url.match( regExp );
+    var options = this.Splide.options.video;
+    var player = new player_es["a" /* default */](this.elements.iframe, {
+      id: this.videoId,
+      controls: !options.hideControls,
+      loop: options.loop
+    });
+    player.on('play', this.onPlay.bind(this));
+    player.on('pause', this.onPause.bind(this));
+    player.on('ended', this.onEnded.bind(this));
+    player.setVolume(Math.max(Math.min(options.volume, 1), 0));
+    player.setMuted(options.mute);
 
-		return ( match && match[ 1 ] ) ? match[1] : '';
-	}
+    if (readyCallback) {
+      player.ready().then(readyCallback);
+    }
 
-	/**
-	 * Called when the player is playing a video.
-	 */
-	onPlay() {
-		if ( this.state.is( PLAY_REQUEST_ABORTED ) && ! this.isActive() ) {
-			this.player.destroy();
-			this.elements.show();
-			this.state.set( NOT_INITIALIZED );
-		} else {
-			this.Splide.emit( 'video:play', this );
-			this.state.set( PLAYING );
-		}
-	}
-}
+    return player;
+  }
+  /**
+   * Find the video ID from the HTML.
+   *
+   * @return {string} - Video ID.
+   */
+  ;
+
+  _proto.findVideoId = function findVideoId() {
+    var url = this.slide.getAttribute('data-splide-vimeo');
+    var regExp = /vimeo.com\/(\d+)/;
+    var match = url.match(regExp);
+    return match && match[1] ? match[1] : '';
+  }
+  /**
+   * Called when the player is playing a video.
+   */
+  ;
+
+  _proto.onPlay = function onPlay() {
+    if (this.state.is(PLAY_REQUEST_ABORTED) && !this.isActive()) {
+      this.player.destroy();
+      this.elements.show();
+      this.state.set(NOT_INITIALIZED);
+    } else {
+      this.Splide.emit('video:play', this);
+      this.state.set(PLAYING);
+    }
+  };
+
+  return Player;
+}(base_player_BasePlayer);
+
+
 // CONCATENATED MODULE: ./src/js/providers/vimeo/index.js
+function vimeo_createSuper(Derived) { return function () { var Super = vimeo_getPrototypeOf(Derived), result; if (vimeo_isNativeReflectConstruct()) { var NewTarget = vimeo_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return vimeo_possibleConstructorReturn(this, result); }; }
+
+function vimeo_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return vimeo_assertThisInitialized(self); }
+
+function vimeo_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function vimeo_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function vimeo_getPrototypeOf(o) { vimeo_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return vimeo_getPrototypeOf(o); }
+
+function vimeo_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
 /**
  * The sub component for embedding a Vimeo video.
  *
@@ -3789,116 +3980,504 @@ class vimeo_player_Player extends base_player_BasePlayer {
  */
 
 
-
-
 /**
  * The sub component for embedding a Vimeo video.
  */
-class vimeo_Vimeo extends base_provider_BaseProvider {
-	/**
-	 * Vimeo constructor.
-	 *
-	 * @param {Splide} Splide     - A Splide instance.
-	 * @param {Object} Components - An object containing components.
-	 */
-	constructor( Splide, Components ) {
-		super( Splide, Components );
-		this.createPlayers( vimeo_player_Player, 'data-splide-vimeo' );
-	}
-}
+
+var vimeo_Vimeo = /*#__PURE__*/function (_BaseProvider) {
+  vimeo_inheritsLoose(Vimeo, _BaseProvider);
+
+  var _super = vimeo_createSuper(Vimeo);
+
+  /**
+   * Vimeo constructor.
+   *
+   * @param {Splide} Splide     - A Splide instance.
+   * @param {Object} Components - An object containing components.
+   */
+  function Vimeo(Splide, Components) {
+    var _this;
+
+    _this = _BaseProvider.call(this, Splide, Components) || this;
+
+    _this.createPlayers(vimeo_player_Player, 'data-splide-vimeo');
+
+    return _this;
+  }
+
+  return Vimeo;
+}(base_provider_BaseProvider);
+
+
 // CONCATENATED MODULE: ./src/js/providers/facebook/player.js
+function facebook_player_createSuper(Derived) { return function () { var Super = facebook_player_getPrototypeOf(Derived), result; if (facebook_player_isNativeReflectConstruct()) { var NewTarget = facebook_player_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return facebook_player_possibleConstructorReturn(this, result); }; }
+
+function facebook_player_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return facebook_player_assertThisInitialized(self); }
+
+function facebook_player_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function facebook_player_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function facebook_player_getPrototypeOf(o) { facebook_player_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return facebook_player_getPrototypeOf(o); }
+
+function facebook_player_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 
 
-class facebook_player_Player extends base_player_BasePlayer {
-  constructor( Splide, Components, slide ) {
-    super(Splide, Components, slide);
-    this.fbPlayer = null;
+
+var facebook_player_Player = /*#__PURE__*/function (_BasePlayer) {
+  facebook_player_inheritsLoose(Player, _BasePlayer);
+
+  var _super = facebook_player_createSuper(Player);
+
+  function Player(Splide, Components, slide) {
+    var _this;
+
+    _this = _BasePlayer.call(this, Splide, Components, slide) || this;
+    _this.fbPlayer = null;
+    return _this;
   }
 
-  destroy() {
-    super.destroy();
-  }
+  var _proto = Player.prototype;
 
-  createPlayer( readyCallback = null ) {
+  _proto.destroy = function destroy() {
+    _BasePlayer.prototype.destroy.call(this);
+  };
+
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
+
     var that = this;
-
     $(document).ready(function () {
       that.resizeFB();
     });
     $(window).resize(that.resizeFB.bind(that));
-
-    let videoId = this.videoId;
-    let htmlVideo = '<div class="fb-video" id="carousel-fb-video-' + videoId + '" data-href="https://www.facebook.com/facebook/videos/' + videoId + '/" data-allowfullscreen="true" data-autoplay="true"></div>';
+    var videoId = this.videoId;
+    var htmlVideo = '<div class="fb-video" id="carousel-fb-video-' + videoId + '" data-href="https://www.facebook.com/facebook/videos/' + videoId + '/" data-allowfullscreen="true" data-autoplay="true"></div>';
     this.slide.querySelector('.splide__video').innerHTML = htmlVideo;
     FB.XFBML.parse();
-
-    FB.Event.subscribe('xfbml.ready', function(msg) {
+    FB.Event.subscribe('xfbml.ready', function (msg) {
       if (msg.type === 'video' && msg.id === 'carousel-fb-video-' + videoId) {
         that.resizeFB();
-
         that.fbPlayer = msg.instance;
+        var playEventHandler = that.fbPlayer.subscribe('startedPlaying', that.onPlay.bind(that));
+        var pausedEventHandler = that.fbPlayer.subscribe('paused', that.onPause.bind(that));
+        var endedEventHandler = that.fbPlayer.subscribe('finishedPlaying', that.onEnded.bind(that));
 
-        var playEventHandler = that.fbPlayer.subscribe('startedPlaying', that.onPlay.bind( that ));
-        var pausedEventHandler = that.fbPlayer.subscribe('paused', that.onPause.bind( that ));
-        var endedEventHandler = that.fbPlayer.subscribe('finishedPlaying', that.onEnded.bind( that ));
-
-        if(readyCallback) {
+        if (readyCallback) {
           readyCallback();
           that.state.set(PLAYING);
         }
       }
     });
+    return null;
+  };
+
+  _proto.resizeFB = function resizeFB() {
+    var thisSlide = $(this.slide);
+    var containerWidth = thisSlide.width();
+    var iframeOldWidth = $(thisSlide).find("iframe").width();
+    var iframeOldHeight = $(thisSlide).find("iframe").height();
+    $(thisSlide).find("iframe").attr("width", containerWidth);
+    var containerHeight = $(this.slide).height();
+    var frameHeight = iframeOldHeight * (containerWidth / iframeOldWidth);
+    var frameTop = (containerHeight - frameHeight) / 2;
+    $(thisSlide).find("iframe").attr("height", frameHeight);
+
+    if (frameTop > 0) {
+      $(thisSlide).find("iframe").css("top", frameTop);
+    }
+  };
+
+  _proto.findVideoId = function findVideoId() {
+    var url = this.slide.getAttribute('data-splide-facebook');
+    var regExp = /\/videos\/(\d+)/;
+    var match = url.match(regExp);
+    var videoId = match && match[1] ? match[1] : '';
+    return videoId;
+  };
+
+  _proto.playVideo = function playVideo() {
+    this.fbPlayer.play();
+  };
+
+  _proto.pauseVideo = function pauseVideo() {
+    this.fbPlayer.pause();
+  };
+
+  return Player;
+}(base_player_BasePlayer);
+
+
+// CONCATENATED MODULE: ./src/js/providers/facebook/index.js
+function facebook_createSuper(Derived) { return function () { var Super = facebook_getPrototypeOf(Derived), result; if (facebook_isNativeReflectConstruct()) { var NewTarget = facebook_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return facebook_possibleConstructorReturn(this, result); }; }
+
+function facebook_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return facebook_assertThisInitialized(self); }
+
+function facebook_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function facebook_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function facebook_getPrototypeOf(o) { facebook_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return facebook_getPrototypeOf(o); }
+
+function facebook_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+
+
+
+var facebook_Facebook = /*#__PURE__*/function (_BaseProvider) {
+  facebook_inheritsLoose(Facebook, _BaseProvider);
+
+  var _super = facebook_createSuper(Facebook);
+
+  function Facebook(Splide, Components) {
+    var _this;
+
+    _this = _BaseProvider.call(this, Splide, Components) || this;
+
+    _this.createPlayers(facebook_player_Player, 'data-splide-facebook');
+
+    return _this;
+  }
+
+  return Facebook;
+}(base_provider_BaseProvider);
+
+
+// CONCATENATED MODULE: ./src/js/providers/youku/player.js
+function youku_player_createSuper(Derived) { return function () { var Super = youku_player_getPrototypeOf(Derived), result; if (youku_player_isNativeReflectConstruct()) { var NewTarget = youku_player_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return youku_player_possibleConstructorReturn(this, result); }; }
+
+function youku_player_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return youku_player_assertThisInitialized(self); }
+
+function youku_player_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function youku_player_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function youku_player_getPrototypeOf(o) { youku_player_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return youku_player_getPrototypeOf(o); }
+
+function youku_player_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+
+
+
+var youku_player_Player = /*#__PURE__*/function (_BasePlayer) {
+  youku_player_inheritsLoose(Player, _BasePlayer);
+
+  var _super = youku_player_createSuper(Player);
+
+  function Player(Splide, Components, slide) {
+    var _this;
+
+    _this = _BasePlayer.call(this, Splide, Components, slide) || this;
+    _this.iframe = null;
+    _this.iframeContainer = null;
+
+    if (_this.isHandlingClicks()) {
+      _this.onSlideMoved();
+    }
+
+    _this.lastActiveState = false;
+    return _this;
+  }
+
+  var _proto = Player.prototype;
+
+  _proto.destroy = function destroy() {
+    _BasePlayer.prototype.destroy.call(this);
+  };
+
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
+
+    var that = this;
+    $(document).ready(function () {
+      that.resizeYouku();
+    });
+    $(window).resize(that.resizeYouku.bind(that));
+    var videoId = this.videoId;
+    var href = "https://player.youku.com/embed/" + this.videoId;
+    var videoIframeString = "<iframe scrolling=\"no\" frameborder=\"0\" id=\"player\" src=\"" + href + "\" allowfullscreen=\"true\" style=\"position: absolute; z-index: 10; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;\"></iframe>";
+    this.iframeContainer = this.slide.querySelector('.splide__video');
+    this.iframeContainer.innerHTML = videoIframeString;
+    this.iframe = this.slide.querySelector('.splide__video > iframe');
+    return null;
+  };
+
+  _proto.clearPlayer = function clearPlayer() {
+    this.iframeContainer.innerHTML = '';
+    this.state.set(NOT_INITIALIZED);
+  };
+
+  _proto.onSlideMoved = function onSlideMoved() {
+    var that = this;
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.attributeName === "class") {
+          var attributeValue = $(mutation.target).prop(mutation.attributeName);
+
+          if (attributeValue.match(/is-active/i)) {
+            that.lastActiveState = true;
+          } else {
+            if (that.lastActiveState) {
+              that.clearPlayer();
+            }
+
+            that.lastActiveState = false;
+          }
+        }
+      });
+    });
+    observer.observe(this.slide, {
+      attributes: true
+    });
+  };
+
+  _proto.resizeYouku = function resizeYouku() {
+    var thisSlide = $(this.slide);
+    var containerWidth = thisSlide.width();
+    var iframeOldWidth = $(thisSlide).find("iframe").width();
+    var iframeOldHeight = $(thisSlide).find("iframe").height();
+    $(thisSlide).find("iframe").attr("width", containerWidth);
+    var containerHeight = $(this.slide).height();
+    var frameHeight = iframeOldHeight * (containerWidth / iframeOldWidth);
+    var frameTop = (containerHeight - frameHeight) / 2;
+    $(thisSlide).find("iframe").attr("height", frameHeight);
+
+    if (frameTop > 0) {
+      $(thisSlide).find("iframe").css("top", frameTop);
+    }
+  };
+
+  _proto.findVideoId = function findVideoId() {
+    var url = this.slide.getAttribute('data-splide-youku');
+    var regExp = /\/v_show\/id_([0-9A-Z_]+)/i;
+    var match = url.match(regExp);
+    var videoId = match && match[1] ? match[1] : '';
+    return videoId;
+  };
+
+  _proto.playVideo = function playVideo() {};
+
+  _proto.pauseVideo = function pauseVideo() {};
+
+  return Player;
+}(base_player_BasePlayer);
+
+
+// CONCATENATED MODULE: ./src/js/providers/youku/index.js
+function youku_createSuper(Derived) { return function () { var Super = youku_getPrototypeOf(Derived), result; if (youku_isNativeReflectConstruct()) { var NewTarget = youku_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return youku_possibleConstructorReturn(this, result); }; }
+
+function youku_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return youku_assertThisInitialized(self); }
+
+function youku_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function youku_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function youku_getPrototypeOf(o) { youku_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return youku_getPrototypeOf(o); }
+
+function youku_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+
+
+
+var youku_Youku = /*#__PURE__*/function (_BaseProvider) {
+  youku_inheritsLoose(Youku, _BaseProvider);
+
+  var _super = youku_createSuper(Youku);
+
+  function Youku(Splide, Components) {
+    var _this;
+
+    _this = _BaseProvider.call(this, Splide, Components) || this;
+
+    _this.createPlayers(youku_player_Player, 'data-splide-youku');
+
+    return _this;
+  }
+
+  return Youku;
+}(base_provider_BaseProvider);
+
+
+// CONCATENATED MODULE: ./src/js/providers/tiktok/player.js
+function tiktok_player_createSuper(Derived) { return function () { var Super = tiktok_player_getPrototypeOf(Derived), result; if (tiktok_player_isNativeReflectConstruct()) { var NewTarget = tiktok_player_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return tiktok_player_possibleConstructorReturn(this, result); }; }
+
+function tiktok_player_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return tiktok_player_assertThisInitialized(self); }
+
+function tiktok_player_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function tiktok_player_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function tiktok_player_getPrototypeOf(o) { tiktok_player_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return tiktok_player_getPrototypeOf(o); }
+
+function tiktok_player_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+
+
+
+var tiktok_player_Player = /*#__PURE__*/function (_BasePlayer) {
+  tiktok_player_inheritsLoose(Player, _BasePlayer);
+
+  var _super = tiktok_player_createSuper(Player);
+
+  function Player(Splide, Components, slide) {
+    var _this;
+
+    _this = _BasePlayer.call(this, Splide, Components, slide) || this;
+    _this.iframe = null;
+    _this.iframeContainer = null;
+
+    if (_this.isHandlingClicks()) {
+      _this.onSlideMoved();
+    }
+
+    _this.lastActiveState = false;
+    _this.videoId = _this.findVideoId();
+    return _this;
+  }
+
+  var _proto = Player.prototype;
+
+  _proto.destroy = function destroy() {
+    _BasePlayer.prototype.destroy.call(this);
+  };
+
+  _proto.createPlayer = function createPlayer(readyCallback) {
+    if (readyCallback === void 0) {
+      readyCallback = null;
+    }
+
+    var that = this;
+    $(document).ready(function () {
+      that.resizeTikTok();
+    });
+    $(window).resize(that.resizeTikTok.bind(that));
+    var videoId = this.videoId;
+    var videoIframeString = "<blockquote class=\"tiktok-embed-carousel\" data-video-id=\"" + videoId + "\" style=\"max-width: 325px;min-width: 325px; transform: scale(.85); top: -50px; height: 772px;\"><iframe src=\"https://www.tiktok.com/embed/v2/" + videoId + "?lang=en-US\" style=\"width: 100%; height: 772px; display: block; visibility: unset; max-height: 772px;\" frameborder=\"0\"></iframe></blockquote>";
+    this.iframeContainer = this.slide.querySelector('.splide__video');
+    this.iframeContainer.innerHTML = videoIframeString;
+    this.iframe = this.slide.querySelector('.splide__video > iframe');
+    var blockContainer = $(this.iframeContainer).find('.blockquote'); // setTimeout(() => {
+    //   $(blockContainer).css({ transform: 'scale(.85)' });
+    // }, 100);
+    // this.setSplideHeightForTikTok(true);
 
     return null;
   }
-
-  resizeFB() {
-    let thisSlide = $(this.slide);
-
-    let containerWidth = thisSlide.width();
-    let iframeOldWidth = $(thisSlide).find("iframe").width();
-    let iframeOldHeight = $(thisSlide).find("iframe").height();
-
-    $(thisSlide).find("iframe").attr("width", containerWidth);
-
-    let containerHeight = $(this.slide).height();
-    let frameHeight = iframeOldHeight * (containerWidth / iframeOldWidth);
-    let frameTop = (containerHeight - frameHeight) / 2;
-
-    $(thisSlide).find("iframe").attr("height", frameHeight);
-    if(frameTop > 0) {
-      $(thisSlide).find("iframe").css("top", frameTop);
+  /*
+  setSplideHeightForTikTok(shown) {
+    return;
+     if(shown) {
+      $(this.slide.querySelector('.splide__video')).parent('.splide__slide').height('772px');
+    } else {
+      $(this.slide.querySelector('.splide__video')).parent('.splide__slide').height('378px');
     }
   }
+  */
+  ;
 
-  findVideoId() {
-    const url    = this.slide.getAttribute( 'data-splide-facebook' );
-    const regExp = /\/videos\/(\d+)/;
-    const match  = url.match( regExp );
+  _proto.clearPlayer = function clearPlayer() {
+    // this.setSplideHeightForTikTok(false);
+    this.iframeContainer.innerHTML = '';
+    this.state.set(NOT_INITIALIZED);
+  };
 
-    const videoId = ( match && match[ 1 ] ) ? match[1] : '';
+  _proto.onSlideMoved = function onSlideMoved() {
+    var that = this;
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.attributeName === "class") {
+          var attributeValue = $(mutation.target).prop(mutation.attributeName);
+
+          if (attributeValue.match(/is-active/i)) {
+            that.lastActiveState = true;
+          } else {
+            if (that.lastActiveState) {
+              that.clearPlayer();
+            }
+
+            that.lastActiveState = false;
+          }
+        }
+      });
+    });
+    observer.observe(this.slide, {
+      attributes: true
+    });
+  };
+
+  _proto.resizeTikTok = function resizeTikTok() {
+    return;
+    var thisSlide = $(this.slide);
+    var containerWidth = thisSlide.width();
+    var iframeOldWidth = $(thisSlide).find("iframe").width();
+    var iframeOldHeight = $(thisSlide).find("iframe").height();
+    $(thisSlide).find("iframe").attr("width", containerWidth);
+    var containerHeight = $(this.slide).height();
+    var frameHeight = iframeOldHeight * (containerWidth / iframeOldWidth);
+    var frameTop = (containerHeight - frameHeight) / 2;
+    $(thisSlide).find("iframe").attr("height", frameHeight);
+
+    if (frameTop > 0) {
+      $(thisSlide).find("iframe").css("top", frameTop);
+    }
+  };
+
+  _proto.findVideoId = function findVideoId() {
+    var url = this.slide.getAttribute('data-splide-tiktok');
+    var regExp = /\/([0-9]+)[^\/]*$/i;
+    var match = url.match(regExp);
+    var videoId = match && match[1] ? match[1] : '';
     return videoId;
+  };
+
+  _proto.playVideo = function playVideo() {};
+
+  _proto.pauseVideo = function pauseVideo() {};
+
+  return Player;
+}(base_player_BasePlayer);
+
+
+// CONCATENATED MODULE: ./src/js/providers/tiktok/index.js
+function tiktok_createSuper(Derived) { return function () { var Super = tiktok_getPrototypeOf(Derived), result; if (tiktok_isNativeReflectConstruct()) { var NewTarget = tiktok_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return tiktok_possibleConstructorReturn(this, result); }; }
+
+function tiktok_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return tiktok_assertThisInitialized(self); }
+
+function tiktok_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function tiktok_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function tiktok_getPrototypeOf(o) { tiktok_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return tiktok_getPrototypeOf(o); }
+
+function tiktok_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+
+
+
+var tiktok_TikTok = /*#__PURE__*/function (_BaseProvider) {
+  tiktok_inheritsLoose(TikTok, _BaseProvider);
+
+  var _super = tiktok_createSuper(TikTok);
+
+  function TikTok(Splide, Components) {
+    var _this;
+
+    _this = _BaseProvider.call(this, Splide, Components) || this;
+
+    _this.createPlayers(tiktok_player_Player, 'data-splide-tiktok');
+
+    return _this;
   }
 
-  playVideo() {
-    this.fbPlayer.play();
-  }
-
-  pauseVideo() {
-    this.fbPlayer.pause();
-  }
-}
-// CONCATENATED MODULE: ./src/js/providers/facebook/index.js
+  return TikTok;
+}(base_provider_BaseProvider);
 
 
-
-class facebook_Facebook extends base_provider_BaseProvider {
-  constructor( Splide, Components ) {
-    super( Splide, Components );
-    this.createPlayers( facebook_player_Player, 'data-splide-facebook' );
-  }
-}
 // CONCATENATED MODULE: ./src/js/providers/index.js
 /**
  * Export provider classes.
@@ -3912,11 +4491,13 @@ class facebook_Facebook extends base_provider_BaseProvider {
 
 
 
-const PROVIDERS = {
-	HtmlVideo: html_video_HTMLVideo,
-	YouTube: youtube_YouTube,
-	Vimeo: vimeo_Vimeo,
+var PROVIDERS = {
+  HtmlVideo: html_video_HTMLVideo,
+  YouTube: youtube_YouTube,
+  Vimeo: vimeo_Vimeo,
   Facebook: facebook_Facebook,
+  Youku: youku_Youku,
+  TikTok: tiktok_TikTok
 };
 // CONCATENATED MODULE: ./src/js/constants/defaults.js
 /**
@@ -3925,59 +4506,60 @@ const PROVIDERS = {
  * @author    Naotoshi Fujita
  * @copyright Naotoshi Fujita. All rights reserved.
  */
+var DEFAULTS = {
+  /**
+   * Whether to play the video automatically.
+   *
+   * @type {boolean}
+   */
+  autoplay: false,
 
-const DEFAULTS = {
-	/**
-	 * Whether to play the video automatically.
-	 *
-	 * @type {boolean}
-	 */
-	autoplay: false,
+  /**
+   * Disable the overlay UI.
+   *
+   * @type {boolean}
+   */
+  disableOverlayUI: false,
 
-	/**
-	 * Disable the overlay UI.
-	 *
-	 * @type {boolean}
-	 */
-	disableOverlayUI: false,
+  /**
+   * Hide the video control UI.
+   *
+   * @type {boolean}
+   */
+  hideControls: false,
 
-	/**
-	 * Hide the video control UI.
-	 *
-	 * @type {boolean}
-	 */
-	hideControls: false,
+  /**
+   * Hide full screen button.
+   * Only for YouTube.
+   *
+   * @type {boolean}
+   */
+  disableFullScreen: false,
 
-	/**
-	 * Hide full screen button.
-	 * Only for YouTube.
-	 *
-	 * @type {boolean}
-	 */
-	disableFullScreen: false,
+  /**
+   * Loop the video.
+   *
+   * @type {boolean}
+   */
+  loop: false,
 
-	/**
-	 * Loop the video.
-	 *
-	 * @type {boolean}
-	 */
-	loop: false,
+  /**
+   * Mute the video.
+   *
+   * @type {boolean}
+   */
+  mute: false,
 
-	/**
-	 * Mute the video.
-	 *
-	 * @type {boolean}
-	 */
-	mute: false,
-
-	/**
-	 * Default volume(0.0-1.0).
-	 *
-	 * @type {number}
-	 */
-	volume: 0.2,
+  /**
+   * Default volume(0.0-1.0).
+   *
+   * @type {number}
+   */
+  volume: 0.2
 };
 // CONCATENATED MODULE: ./src/js/splide-extension-video.js
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 /**
  * The extension component for embedding videos to slides.
  *
@@ -3987,16 +4569,13 @@ const DEFAULTS = {
 
 
 
-
-
 /**
  * The status class name added to the root element while the video is playing.
  *
  * @type {string}
  */
-const PLAYING_STATUS_CLASS_NAME = 'is-playing';
 
-
+var PLAYING_STATUS_CLASS_NAME = 'is-playing';
 /**
  * The extension component for embedding videos to slides.
  *
@@ -4005,70 +4584,67 @@ const PLAYING_STATUS_CLASS_NAME = 'is-playing';
  *
  * @return {Object} - Extension object.
  */
-/* harmony default export */ var splide_extension_video = __webpack_exports__["default"] = (( Splide, Components ) => {
-	/**
-	 * A slide element whose video is playing.
-	 *
-	 * @type {Element}
-	 */
-	let activeSlide;
 
-	/**
-	 * Store provider components.
-	 * 
-	 * @type {Object[]}
-	 */
-	let Providers = [];
+/* harmony default export */ var splide_extension_video = __webpack_exports__["default"] = (function (Splide, Components) {
+  /**
+   * A slide element whose video is playing.
+   *
+   * @type {Element}
+   */
+  var activeSlide;
+  /**
+   * Store provider components.
+   * 
+   * @type {Object[]}
+   */
 
-	const Video = {
-		/**
-		 * Called when this extension is mounted.
-		 * Initialize all sub components.
-		 */
-		mount() {
-			if ( typeof Splide.options.video !== 'object' ) {
-				Splide.options.video = {};
-			}
+  var Providers = [];
+  var Video = {
+    /**
+     * Called when this extension is mounted.
+     * Initialize all sub components.
+     */
+    mount: function mount() {
+      if (typeof Splide.options.video !== 'object') {
+        Splide.options.video = {};
+      }
 
-			Splide.options.video = { ...DEFAULTS, ...Splide.options.video };
+      Splide.options.video = _extends({}, DEFAULTS, {}, Splide.options.video);
+      each(PROVIDERS, function (Provider) {
+        Providers.push(new Provider(Splide, Components));
+      });
+      bind();
+    },
 
-			each( PROVIDERS, Provider => {
-				Providers.push( new Provider( Splide, Components ) );
-			} );
+    /**
+     * Destroy.
+     */
+    destroy: function destroy() {
+      Providers.forEach(function (Provider) {
+        Provider.destroy();
+      });
+    }
+  };
+  /**
+   * Listen to some events.
+   */
 
-			bind();
-		},
+  function bind() {
+    var classList = Splide.root.classList;
+    Splide.on('video:play', function (Player) {
+      activeSlide = Player.slide;
+      classList.add(PLAYING_STATUS_CLASS_NAME);
+    }).on('video:pause video:ended', function (Player) {
+      if (Player.slide === activeSlide) {
+        activeSlide = null;
+        classList.remove(PLAYING_STATUS_CLASS_NAME);
+      }
+    }).on('destroy', function () {
+      classList.remove(PLAYING_STATUS_CLASS_NAME);
+    });
+  }
 
-		/**
-		 * Destroy.
-		 */
-		destroy() {
-			Providers.forEach( Provider => { Provider.destroy() } );
-		}
-	};
-
-	/**
-	 * Listen to some events.
-	 */
-	function bind() {
-		const classList = Splide.root.classList;
-
-		Splide
-			.on( 'video:play', Player => {
-				activeSlide = Player.slide;
-				classList.add( PLAYING_STATUS_CLASS_NAME );
-			} )
-			.on( 'video:pause video:ended', Player => {
-				if ( Player.slide === activeSlide ) {
-					activeSlide = null;
-					classList.remove( PLAYING_STATUS_CLASS_NAME );
-				}
-			} ).on( 'destroy', () => {
-				classList.remove( PLAYING_STATUS_CLASS_NAME );
-			} );
-	}
-
-	return Video;
+  return Video;
 });
 
 /***/ })

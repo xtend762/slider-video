@@ -10,6 +10,7 @@ import YouTube from './youtube';
 import Vimeo from './vimeo';
 import Facebook from './facebook';
 import Youku from './youku';
+import TikTok from './tiktok'
 
 export const PROVIDERS = {
 	HtmlVideo,
@@ -17,4 +18,5 @@ export const PROVIDERS = {
 	Vimeo,
   Facebook,
   Youku,
+  TikTok,
 };

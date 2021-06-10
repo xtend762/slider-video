@@ -35,7 +35,7 @@ export default class Player extends BasePlayer {
 
     let videoId = this.videoId;
 
-    const videoIframeString = `<blockquote class="tiktok-embed" data-video-id="${videoId}" style="max-width: 325px;min-width: 325px;"><iframe src="https://www.tiktok.com/embed/v2/${videoId}?lang=en-US" style="width: 100%; height: 772px; display: block; visibility: unset; max-height: 772px;" frameborder="0"></iframe></blockquote>`;
+    const videoIframeString = `<blockquote class="tiktok-embed-carousel" data-video-id="${videoId}" style="max-width: 325px;min-width: 325px; transform: scale(.85); top: -50px; height: 772px;"><iframe src="https://www.tiktok.com/embed/v2/${videoId}?lang=en-US" style="width: 100%; height: 772px; display: block; visibility: unset; max-height: 772px;" frameborder="0"></iframe></blockquote>`;
 
     this.iframeContainer = this.slide.querySelector('.splide__video');
 
@@ -43,10 +43,31 @@ export default class Player extends BasePlayer {
 
     this.iframe = this.slide.querySelector('.splide__video > iframe');
 
+    let blockContainer = $(this.iframeContainer).find('.blockquote');
+
+    // setTimeout(() => {
+    //   $(blockContainer).css({ transform: 'scale(.85)' });
+    // }, 100);
+
+    // this.setSplideHeightForTikTok(true);
+
     return null;
   }
 
+  /*
+  setSplideHeightForTikTok(shown) {
+    return;
+
+    if(shown) {
+      $(this.slide.querySelector('.splide__video')).parent('.splide__slide').height('772px');
+    } else {
+      $(this.slide.querySelector('.splide__video')).parent('.splide__slide').height('378px');
+    }
+  }
+  */
+
   clearPlayer() {
+    // this.setSplideHeightForTikTok(false);
     this.iframeContainer.innerHTML = '';
     this.state.set(NOT_INITIALIZED);
   }
